@@ -52,7 +52,7 @@ if [ -n "`id -u jabber 2>/dev/null`" ]; then
 		exit 1
 	fi
 else
-	/usr/sbin/useradd -g jabber -d /var/lib/jabber -u 74 -s /bin/false jabber 2>/dev/null
+	/usr/sbin/useradd -g jabber -d /var/lib/jabberd -u 74 -s /bin/false jabber 2>/dev/null
 fi
 
 %post
@@ -64,7 +64,7 @@ if [ ! -f /etc/jabber/secret ] ; then
 fi
 
 %preun
-rm -f /var/run/jabberd/* || :
+rm -f /var/run/jabber* || :
 
 %postun
 if [ "$1" = "0" ]; then
