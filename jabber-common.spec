@@ -1,4 +1,5 @@
 Summary:	Common enviroment for Jabber services
+Summary(pl):	Wspólne ¶rodowisko dla us³ug Jabbera
 Name:		jabber-common
 Version:	0
 Release:	1
@@ -9,6 +10,8 @@ Requires(pre):	/usr/bin/getgid
 Requires(pre):	/bin/id
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
+Requires(postun):	/usr/sbin/groupdel
+Requires(postun):	/usr/sbin/userdel
 Conflicts:	jabber
 Obsoletes:	jabber-irc-transport
 Obsoletes:	jabber-conference
@@ -17,13 +20,15 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %description
 This package prepares common environment for Jabber services.
 
-%prep
+%description -l pl
+Ten pakiet przygotowywuje wspólne ¶rodowisko dla us³ug Jabbera.
 
-%build
+%prep
 
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{/var/run/jabber,/etc/jabber}
+
 touch $RPM_BUILD_ROOT%{_sysconfdir}/jabber/secret
 
 %clean
@@ -32,10 +37,10 @@ rm -rf $RPM_BUILD_ROOT
 %pre
 if [ "$1" = 1 ] ; then
 	if [ ! -n "`getgid jabber`" ]; then
-		%{_sbindir}/groupadd -f -g 74 jabber
+		/usr/sbin/groupadd -f -g 74 jabber
 	fi
 	if [ ! -n "`id -u jabber 2>/dev/null`" ]; then
-		%{_sbindir}/useradd -g jabber -d /var/lib/jabber -u 74 -s /bin/false jabber 2>/dev/null
+		/usr/sbin/useradd -g jabber -d /var/lib/jabber -u 74 -s /bin/false jabber 2>/dev/null
 	fi
 fi
 
@@ -51,10 +56,9 @@ fi
 rm -f /var/run/jabberd/* || :
 
 %postun
-# If package is being erased for the last time.
 if [ "$1" = "0" ]; then
-      %{_sbindir}/userdel jabber 2> /dev/null
-      %{_sbindir}/groupdel jabber 2> /dev/null
+      /usr/sbin/userdel jabber 2>/dev/null
+      /usr/sbin/groupdel jabber 2>/dev/null
 fi
 
 %files
