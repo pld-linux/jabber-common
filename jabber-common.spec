@@ -24,7 +24,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 This package prepares common environment for Jabber services.
 
 %description -l pl
-Ten pakiet przygotowywuje wspólne ¶rodowisko dla us³ug Jabbera.
+Ten pakiet przygotowuje wspólne ¶rodowisko dla us³ug Jabbera.
 
 %prep
 
