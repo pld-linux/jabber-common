@@ -2,7 +2,7 @@ Summary:	Common enviroment for Jabber services
 Summary(pl):	Wspólne ¶rodowisko dla us³ug Jabbera
 Name:		jabber-common
 Version:	0
-Release:	4
+Release:	4.1
 License:	GPL
 Group:		Applications/Communications
 BuildRequires:	rpmbuild(macros) >= 1.159
@@ -30,12 +30,17 @@ Ten pakiet przygotowuje wspólne ¶rodowisko dla us³ug Jabbera.
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{/var/run/jabber,/etc/jabber}
+install -d $RPM_BUILD_ROOT{/var/run/jabber,/etc/jabber,/home/services/jabber}
 
 touch $RPM_BUILD_ROOT%{_sysconfdir}/jabber/secret
 
 %clean
 rm -rf $RPM_BUILD_ROOT
+
+%triggerpostun -- jabber-common < 0-4
+if [ "`echo -n ~jabber`" = "/var/lib/jabber" -o "`echo -n ~jabber`" = "/var/lib/jabberd" ] ; then
+	/usr/sbin/usermod -d /home/services/jabber jabber
+fi
 
 %pre
 if [ -n "`getgid jabber`" ]; then
@@ -52,7 +57,7 @@ if [ -n "`id -u jabber 2>/dev/null`" ]; then
 		exit 1
 	fi
 else
-	/usr/sbin/useradd -g jabber -d /var/lib/jabberd -u 74 -s /bin/false jabber 2>/dev/null
+	/usr/sbin/useradd -g jabber -d /home/services/jabber -u 74 -s /bin/false jabber 2>/dev/null
 fi
 
 %post
@@ -64,7 +69,7 @@ if [ ! -f /etc/jabber/secret ] ; then
 fi
 
 %preun
-rm -f /var/run/jabber* || :
+rm -f /var/run/jabber/* || :
 
 %postun
 if [ "$1" = "0" ]; then
@@ -76,4 +81,5 @@ fi
 %defattr(644,root,root,755)
 %dir %{_sysconfdir}/jabber
 %dir %attr(775,root,jabber) /var/run/jabber
+%dir %attr(711,jabber,jabber) /home/services/jabber
 %attr(600,root,root) %ghost %{_sysconfdir}/jabber/secret
