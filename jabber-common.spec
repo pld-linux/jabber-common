@@ -44,7 +44,7 @@ if [ -n "`getgid jabber`" ]; then
 		exit 1
 	fi
 else
-	/usr/sbin/groupadd -f -g 74 jabber
+	/usr/sbin/groupadd -g 74 jabber
 fi
 if [ -n "`id -u jabber 2>/dev/null`" ]; then
 	if [ "`id -u jabber`" != "74" ]; then
