@@ -2,16 +2,19 @@ Summary:	Common enviroment for Jabber services
 Summary(pl):	Wspólne ¶rodowisko dla us³ug Jabbera
 Name:		jabber-common
 Version:	0
-Release:	2
+Release:	3
 License:	GPL
 Group:		Applications/Communications
+BuildRequires:	rpmbuild(macros) >= 1.159
 Requires(post):	/usr/bin/perl
-Requires(pre):	/usr/bin/getgid
 Requires(pre):	/bin/id
+Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
 Requires(postun):	/usr/sbin/groupdel
 Requires(postun):	/usr/sbin/userdel
+Provides:	group(jabber)
+Provides:	user(jabber)
 Conflicts:	jabber
 Obsoletes:	jabber-irc-transport
 Obsoletes:	jabber-conference
@@ -35,13 +38,21 @@ touch $RPM_BUILD_ROOT%{_sysconfdir}/jabber/secret
 rm -rf $RPM_BUILD_ROOT
 
 %pre
-if [ "$1" = 1 ] ; then
-	if [ ! -n "`getgid jabber`" ]; then
-		/usr/sbin/groupadd -f -g 74 jabber
+if [ -n "`getgid jabber`" ]; then
+	if [ "`getgid jabber`" != "74" ]; then
+		echo "Error: group jabber doesn't have gid=74. Correct this before installing bind." 1>&2
+		exit 1
 	fi
-	if [ ! -n "`id -u jabber 2>/dev/null`" ]; then
-		/usr/sbin/useradd -g jabber -d /var/lib/jabber -u 74 -s /bin/false jabber 2>/dev/null
+else
+	/usr/sbin/groupadd -f -g 74 jabber
+fi
+if [ -n "`id -u jabber 2>/dev/null`" ]; then
+	if [ "`id -u jabber`" != "74" ]; then
+		echo "Error: user jabber doesn't have uid=74. Correct this before installing bind." 1>&2
+		exit 1
 	fi
+else
+	/usr/sbin/useradd -g jabber -d /var/lib/jabber -u 74 -s /bin/false jabber 2>/dev/null
 fi
 
 %post
@@ -57,8 +68,8 @@ rm -f /var/run/jabberd/* || :
 
 %postun
 if [ "$1" = "0" ]; then
-	/usr/sbin/userdel jabber 2>/dev/null
-	/usr/sbin/groupdel jabber 2>/dev/null
+	%userremove jabber
+	%groupremove jabber
 fi
 
 %files
