@@ -46,10 +46,10 @@ fi
 
 %post
 if [ ! -f /etc/jabber/secret ] ; then
-        echo "Generating Jabberd component authentication secret..."
-        umask 066
-        perl -e 'open R,"/dev/urandom"; read R,$r,16;
-                 printf "%02x",ord(chop $r) while($r);' > /etc/jabber/secret
+	echo "Generating Jabberd component authentication secret..."
+	umask 066
+	perl -e 'open R,"/dev/urandom"; read R,$r,16;
+		printf "%02x",ord(chop $r) while($r);' > /etc/jabber/secret
 fi
 
 %preun
@@ -57,8 +57,8 @@ rm -f /var/run/jabberd/* || :
 
 %postun
 if [ "$1" = "0" ]; then
-      /usr/sbin/userdel jabber 2>/dev/null
-      /usr/sbin/groupdel jabber 2>/dev/null
+	/usr/sbin/userdel jabber 2>/dev/null
+	/usr/sbin/groupdel jabber 2>/dev/null
 fi
 
 %files
