@@ -1,0 +1,5 @@
+- Release: 4.1
+- /home/services/jabber added as $HOME for jabber. ejabberd (ERLang actually) requires writtable $HOME,
+  and it is also usefull for jabber administrators.
+- trigger fixing $HOME when upgrading from older jabber-common
+- /var/run cleaning fixed
