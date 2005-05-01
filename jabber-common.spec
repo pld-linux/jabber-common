@@ -5,8 +5,8 @@ Version:	0
 Release:	5
 License:	GPL
 Group:		Applications/Communications
-BuildRequires:	rpmbuild(macros) >= 1.159
-Requires(post):	/usr/bin/perl
+BuildRequires:	rpmbuild(macros) >= 1.202
+Requires(post):	%{__perl}
 Requires(pre):	/bin/id
 Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
@@ -43,33 +43,21 @@ if [ "`echo -n ~jabber`" = "/var/lib/jabber" -o "`echo -n ~jabber`" = "/var/lib/
 fi
 
 %pre
-if [ -n "`getgid jabber`" ]; then
-	if [ "`getgid jabber`" != "74" ]; then
-		echo "Error: group jabber doesn't have gid=74. Correct this before installing bind." 1>&2
-		exit 1
-	fi
-else
-	/usr/sbin/groupadd -g 74 jabber
-fi
-if [ -n "`id -u jabber 2>/dev/null`" ]; then
-	if [ "`id -u jabber`" != "74" ]; then
-		echo "Error: user jabber doesn't have uid=74. Correct this before installing bind." 1>&2
-		exit 1
-	fi
-else
-	/usr/sbin/useradd -g jabber -d /home/services/jabber -u 74 -s /bin/false jabber 2>/dev/null
-fi
+%groupadd -g 74 jabber
+%useradd -g jabber -d /home/services/jabber -u 74 -s /bin/false jabber
 
 %post
 if [ ! -f /etc/jabber/secret ] ; then
 	echo "Generating Jabberd component authentication secret..."
 	umask 066
-	perl -e 'open R,"/dev/urandom"; read R,$r,16;
+	%{__perl} -e 'open R,"/dev/urandom"; read R,$r,16;
 		printf "%02x",ord(chop $r) while($r);' > /etc/jabber/secret
 fi
 
 %preun
-rm -f /var/run/jabber/* || :
+if [ "$1" = 0 ]; then
+	rm -f /var/run/jabber/* || :
+fi
 
 %postun
 if [ "$1" = "0" ]; then
