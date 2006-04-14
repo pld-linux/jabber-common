@@ -2,7 +2,7 @@ Summary:	Common enviroment for Jabber services
 Summary(pl):	Wspólne ¶rodowisko dla us³ug Jabbera
 Name:		jabber-common
 Version:	0
-Release:	5
+Release:	6
 License:	GPL
 Group:		Applications/Communications
 BuildRequires:	rpmbuild(macros) >= 1.202
