@@ -2,22 +2,22 @@ Summary:	Common enviroment for Jabber services
 Summary(pl):	Wspólne ¶rodowisko dla us³ug Jabbera
 Name:		jabber-common
 Version:	0
-Release:	6
+Release:	7
 License:	GPL
 Group:		Applications/Communications
 BuildRequires:	rpmbuild(macros) >= 1.202
 Requires(post):	%{__perl}
+Requires(postun):	/usr/sbin/groupdel
+Requires(postun):	/usr/sbin/userdel
 Requires(pre):	/bin/id
 Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
-Requires(postun):	/usr/sbin/groupdel
-Requires(postun):	/usr/sbin/userdel
 Provides:	group(jabber)
 Provides:	user(jabber)
-Conflicts:	jabber
-Obsoletes:	jabber-irc-transport
 Obsoletes:	jabber-conference
+Obsoletes:	jabber-irc-transport
+Conflicts:	jabber
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
