@@ -1,5 +1,5 @@
 Summary:	Common enviroment for Jabber services
-Summary(pl):	WspÛlne ∂rodowisko dla us≥ug Jabbera
+Summary(pl.UTF-8):   Wsp√≥lne ≈õrodowisko dla us≈Çug Jabbera
 Name:		jabber-common
 Version:	0
 Release:	7
@@ -23,8 +23,8 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %description
 This package prepares common environment for Jabber services.
 
-%description -l pl
-Ten pakiet przygotowuje wspÛlne ∂rodowisko dla us≥ug Jabbera.
+%description -l pl.UTF-8
+Ten pakiet przygotowuje wsp√≥lne ≈õrodowisko dla us≈Çug Jabbera.
 
 %prep
 
