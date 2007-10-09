@@ -1,4 +1,4 @@
-Summary:	Common enviroment for Jabber services
+Summary:	Common environment for Jabber services
 Summary(pl.UTF-8):	Wspólne środowisko dla usług Jabbera
 Name:		jabber-common
 Version:	0
