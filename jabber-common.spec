@@ -5,6 +5,7 @@ Version:	0
 Release:	8
 License:	GPL
 Group:		Applications/Communications
+Source0:	%{name}.tmpfiles
 BuildRequires:	rpmbuild(macros) >= 1.202
 Requires(post):	%{__perl}
 Requires(postun):	/usr/sbin/groupdel
@@ -30,7 +31,10 @@ Ten pakiet przygotowuje wspólne środowisko dla usług Jabbera.
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{/var/run/jabber,/etc/jabber,/home/services/jabber}
+install -d $RPM_BUILD_ROOT{/var/run/jabber,/etc/jabber,/home/services/jabber} \
+	$RPM_BUILD_ROOT/usr/lib/tmpfiles.d
+
+install %{SOURCE0} $RPM_BUILD_ROOT/usr/lib/tmpfiles.d/jabber.conf
 
 touch $RPM_BUILD_ROOT%{_sysconfdir}/jabber/secret
 
@@ -68,6 +72,7 @@ fi
 %files
 %defattr(644,root,root,755)
 %dir %{_sysconfdir}/jabber
+/usr/lib/tmpfiles.d/jabber.conf
 %dir %attr(775,root,jabber) /var/run/jabber
 %dir %attr(711,jabber,jabber) /home/services/jabber
 %attr(600,root,root) %ghost %{_sysconfdir}/jabber/secret
