@@ -19,6 +19,7 @@ Provides:	user(jabber)
 Obsoletes:	jabber-conference
 Obsoletes:	jabber-irc-transport
 Conflicts:	jabber
+BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
